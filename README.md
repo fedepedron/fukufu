@@ -1,6 +1,8 @@
 FUKUFU
 =======
-Fukufu small program written in c++ to calculate the Fukui function and other reactivity indexes from Gaussian outputs.
+Fukufu is a small piece of sofware written in C++. Its purpose is to calculate the Fukui function and other reactivity indexes from Gaussian outputs.
+
+
 
 USAGE
 ------
@@ -12,6 +14,7 @@ Then run with:
 ```
 
 An output containing several reactivity indexes will be created.
+
 
 
 INSTALATION
