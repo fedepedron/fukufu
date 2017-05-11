@@ -1,14 +1,4 @@
 ///////////////////////////////////////////////////////////////////////////////
-/* Usage:                                                                     /
-/       ./fukui.o sourcefile.log                                              /
-/ The file.log should file a Gaussian (preferably G09) single-point           /
-/ calculation with "# pop=full iop(3/33=4)" options.                          /
-///////////////////////////////////////////////////////////////////////////////
-/ Compilation command:                                                        /
-/      g++ src_fukui.cpp -o fukui.o -std=c++11                                /
-/ The option -std=c++11 is necesary for 'stof'.                              */
-///////////////////////////////////////////////////////////////////////////////
-
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -522,4 +512,4 @@ int main(int argc, char *argv[])
     std::cout << "\n";
 };
 
-
+///////////////////////////////////////////////////////////////////////////////
