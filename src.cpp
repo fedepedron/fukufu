@@ -481,14 +481,14 @@ int main(int argc, char *argv[])
                   << "\nGlobal Reactivity Indexes"
                   << "\nGlobal softness:          " << std::setprecision(3) 
                   << format_d(softness) << "."
+                  << "\nGlobal electro-philicity: " << std::setprecision(3)
+                  << format_d(electrph) << "."
                   << "\nGlobal nucleo-philicity:  " << std::setprecision(3) 
                   << format_d(nucleoph) << "."
-                  << "\nGlobal electro-philicity: " << std::setprecision(3) 
-                  << format_d(electrph) << "."
-                  << "\nGlobal spin-donicity:     " << std::setprecision(3) 
-                  << format_d(spindn)   << "."
                   << "\nGlobal spin-philicity:    " << std::setprecision(3) 
-                  << format_d(spinph)   << ".\n";
+                  << format_d(spinph)   << "."
+                  << "\nGlobal spin-donicity:     " << std::setprecision(3) 
+                  << format_d(spindn)   << ".\n";
         
         // Prints the condensed-to-atoms Fukui function.
         std::cout << "\nCondensed-to-atoms Fukui functions";
@@ -529,9 +529,23 @@ int main(int argc, char *argv[])
         };
 
         std::cout << "\nLocal Reactivity Indexes";
-        std::cout << "\nAtom |  Softness | Electrop | Nucleoph | Spinphil | Spindon \n";
+        std::cout << "\nAtom |  Softness | Electrophilicity | Nucleophilicity |";
+        std::cout << " Spinphilicity | Spindonicity \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
+            std::cout << std::setiosflags(std::ios::fixed) << " " 
+                      << format_i(index_x+1) << "  | " << std::setprecision(5) 
+                      << format_d(fukui_nn[index_x]*softness)   
+                      << "      "    << std::setprecision(5) 
+                      << format_d(fukui_nn[index_x + 2*n_atoms] * electrph) 
+                      << "         " << std::setprecision(5)
+                      << format_d(fukui_nn[index_x +   n_atoms] * nucleoph)
+                      << "        "  << std::setprecision(5)
+                      << format_d(fukui_nn[index_x + 2*n_atoms] * spinph)   
+                      << "       "   << std::setprecision(5)
+                      << format_d(fukui_nn[index_x +   n_atoms] * spindn)
+
+                      << "\n";
         };   
     };
     std::cout << "\n";
