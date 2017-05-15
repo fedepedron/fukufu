@@ -1,5 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <stdlib.h>
 #include <algorithm>
@@ -405,6 +406,8 @@ int main(int argc, char *argv[])
     std::cout << "#      FUKUI FUNCTION CALCULATION      #\n";
     std::cout << "########################################\n\n";
 
+    std::cout.precision(5);
+
     n_orbs = 0; n_elec_a = 0; n_elec_b = 0;
 
     if (argc != 2)
@@ -465,47 +468,46 @@ int main(int argc, char *argv[])
         get_fukui(shape_AH, shape_AL, shape_BH, shape_BL, 
                   fukui_nn, fukui_ss, fukui_ns, fukui_sn, n_atoms);
 
-        // Gets the molecule's global softness.
+        // Gets the molecule's global properties.
         softness = get_softness(energ_a[n_elec_a-1], energ_a[n_elec_a], 
                                 energ_b[n_elec_b-1], energ_b[n_elec_b]);
         std::cout << "\nGlobal softness: " << softness << ".\n";
         
-        std::cout << "\nAtom | FukuiNN- | FukuiNN+ | FukuiNN0 | Local softness \n";
+        // Prints the condensed-to-atoms Fukui function.
+        std::cout << "\nAtom |  FukuiNN- | FukuiNN+ | FukuiNN0 \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
-            std::cout << " " << format_i(index_x)      << "  | " 
-                      << fukui_nn[index_x + n_atoms]   << "  " 
-                      << fukui_nn[index_x + 2*n_atoms] << "  "
-                      << fukui_nn[index_x]             << "  "
-                      << fukui_nn[index_x]*softness    << "\n";
+            std::cout << std::setiosflags(std::ios::fixed) << " " << format_i(index_x+1) << "  | " 
+                      << std::setprecision(5) << format_d(fukui_nn[index_x + n_atoms])   << "  " 
+                      << std::setprecision(5) << format_d(fukui_nn[index_x + 2*n_atoms]) << "  "
+                      << std::setprecision(5) << format_d(fukui_nn[index_x])             << "\n";
         };
 
-        std::cout << "\nAtom | FukuiSS- | FukuiSS+ | FukuiSS0 | Local softness \n";
+        std::cout << "\nAtom |  FukuiSS- | FukuiSS+ | FukuiSS0 \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
-            std::cout << " " << format_i(index_x)      << "  | " 
-                      << fukui_ss[index_x + n_atoms]   << "  " 
-                      << fukui_ss[index_x + 2*n_atoms] << "  "
-                      << fukui_ss[index_x]             << "  "
-                      << fukui_ss[index_x]*softness    << "\n";
+            std::cout << std::setiosflags(std::ios::fixed) << " " << format_i(index_x+1) << "  | " 
+                      << std::setprecision(5) << format_d(fukui_ss[index_x + n_atoms])   << "  " 
+                      << std::setprecision(5) << format_d(fukui_ss[index_x + 2*n_atoms]) << "  "
+                      << std::setprecision(5) << format_d(fukui_ss[index_x])             << "\n";
         };
 
-        std::cout << "\nAtom | FukuiNS- | FukuiNS+ | FukuiNS0 \n";
+        std::cout << "\nAtom |  FukuiNS- | FukuiNS+ | FukuiNS0 \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
-            std::cout << " " << format_i(index_x)      << "  | " 
-                      << fukui_ns[index_x + n_atoms]   << "  " 
-                      << fukui_ns[index_x + 2*n_atoms] << "  "
-                      << fukui_ns[index_x]             << "\n";
+            std::cout << std::setiosflags(std::ios::fixed) << " " << format_i(index_x+1) << "  | " 
+                      << std::setprecision(5) << format_d(fukui_ns[index_x + n_atoms])   << "  " 
+                      << std::setprecision(5) << format_d(fukui_ns[index_x + 2*n_atoms]) << "  "
+                      << std::setprecision(5) << format_d(fukui_ns[index_x])             << "\n";
         };
 
-        std::cout << "\nAtom | FukuiSN- | FukuiSN+ | FukuiSN0 \n";
+        std::cout << "\nAtom |  FukuiSN- | FukuiSN+ | FukuiSN0 \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
-            std::cout << " " << format_i(index_x)      << "  | " 
-                      << fukui_sn[index_x + n_atoms]   << "  " 
-                      << fukui_sn[index_x + 2*n_atoms] << "  "
-                      << fukui_sn[index_x]             << "\n";
+            std::cout << std::setiosflags(std::ios::fixed) << " " << format_i(index_x+1) << "  | " 
+                      << std::setprecision(5) << format_d(fukui_sn[index_x + n_atoms])   << "  " 
+                      << std::setprecision(5) << format_d(fukui_sn[index_x + 2*n_atoms]) << "  "
+                      << std::setprecision(5) << format_d(fukui_sn[index_x])             << "\n";
         };
         
     };
