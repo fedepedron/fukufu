@@ -345,13 +345,16 @@ void get_fukui(double * shape_AH, double * shape_AL, double * shape_BH,
 // Gets the system's global softness.
 // enAH, enAL: the alpha HOMO and LUMO energies. (in)
 // enBH, enBL: the beta HOMO and LUMO energies.  (in)
-double get_softness(double enAH, double enAL, double enBH, double enBL)
+double get_indexes(double enAH , double enAL   , double enBH   , double enBL   ,
+                   double *soft, double *nuclph, double *elecph, double *spindn,
+                   double *spinph)
 {
-    double softness; // The global softness.
+    *soft   = 4 / (enAH + enBH - enAL - enBL);
+    *nuclph = -(enAH + enBH)*(enAH + enBH)*(*soft) / 2;
+    *elecph = -(enAL + enBL)*(enAL + enBL)*(*soft) / 2;
+    *spinph = -(enAL - enBH)*(enAL - enBH)*(*soft) / 2;
+    *spindn = -(enAH - enBL)*(enAH - enBL)*(*soft) / 2;
 
-    softness = 4 / (enAH + enBH - enAL - enBL);
-
-    return softness;
 };
 
 // Formats a number into string, and adds a blank if positive.
@@ -390,7 +393,9 @@ int main(int argc, char *argv[])
            n_atoms,                      // Number of atoms in molecule.
            n_deg_AH, n_deg_AL,           // Degeneration for alpha HOMO/LUMO.
            n_deg_BH, n_deg_BL;           // Degeneration for beta HOMO/LUMO.
-    double softness;                     // The global softness.
+    double softness,                     // The global softness.
+           electrph, nucleoph,           // The global electro/nucleophilicity.
+           spinph  , spindn  ;           // The global spinphilicity/donicity.
     int    * atom_of_orb,                // The atom for each basis function.
            * deg_AH_MO, * deg_AL_MO ,    // Degenerated alpha HO/LU MOs.
            * deg_BH_MO, * deg_BL_MO ;    // Degenerated beta HO/LU MOs.
@@ -469,11 +474,24 @@ int main(int argc, char *argv[])
                   fukui_nn, fukui_ss, fukui_ns, fukui_sn, n_atoms);
 
         // Gets the molecule's global properties.
-        softness = get_softness(energ_a[n_elec_a-1], energ_a[n_elec_a], 
-                                energ_b[n_elec_b-1], energ_b[n_elec_b]);
-        std::cout << "\nGlobal softness: " << softness << ".\n";
+        get_indexes(energ_a[n_elec_a-1], energ_a[n_elec_a], energ_b[n_elec_b-1],
+                    energ_b[n_elec_b], &softness, &nucleoph, &electrph,
+                    &spindn, &spinph);
+        std::cout << std::setiosflags(std::ios::fixed) 
+                  << "\nGlobal Reactivity Indexes"
+                  << "\nGlobal softness:          " << std::setprecision(3) 
+                  << format_d(softness) << "."
+                  << "\nGlobal nucleo-philicity:  " << std::setprecision(3) 
+                  << format_d(nucleoph) << "."
+                  << "\nGlobal electro-philicity: " << std::setprecision(3) 
+                  << format_d(electrph) << "."
+                  << "\nGlobal spin-donicity:     " << std::setprecision(3) 
+                  << format_d(spindn)   << "."
+                  << "\nGlobal spin-philicity:    " << std::setprecision(3) 
+                  << format_d(spinph)   << ".\n";
         
         // Prints the condensed-to-atoms Fukui function.
+        std::cout << "\nCondensed-to-atoms Fukui functions";
         std::cout << "\nAtom |  FukuiNN- | FukuiNN+ | FukuiNN0 \n";
         for (index_x = 0; index_x < n_atoms; index_x +=1)
         {
@@ -509,7 +527,12 @@ int main(int argc, char *argv[])
                       << std::setprecision(5) << format_d(fukui_sn[index_x + 2*n_atoms]) << "  "
                       << std::setprecision(5) << format_d(fukui_sn[index_x])             << "\n";
         };
-        
+
+        std::cout << "\nLocal Reactivity Indexes";
+        std::cout << "\nAtom |  Softness | Electrop | Nucleoph | Spinphil | Spindon \n";
+        for (index_x = 0; index_x < n_atoms; index_x +=1)
+        {
+        };   
     };
     std::cout << "\n";
 };
